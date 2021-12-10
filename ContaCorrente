@@ -1,0 +1,103 @@
+package contas;
+
+import utils.Arquivo;
+
+public class ContaCorrente extends Conta { // criação da classe ContaCorrente que extende da superclasse Conta
+    /*
+     * Declaração da variavel limite que existe somente na conta corrente Declaração
+     * da variavel de controle do arquivo
+     */
+    private double limite;
+
+    /*
+     * Inicio da declaração dos contrutores da classe ContaCorrente seguindo as
+     * convenções estabelecidas pela sociedade de desenvolvedores (JAVABEANS)
+     */
+    public ContaCorrente() {
+        this(0, 0, 0, 0, 0);
+    };
+
+    public ContaCorrente(int agencia, int numero, int digito, double saldo, double limite) {
+        Arquivo gerenciadorArquivo = new Arquivo(numero + "-extrato.txt");
+        gerenciadorArquivo.criarArquivo();
+        super.setAgencia(agencia);
+        super.setNumero(numero);
+        super.setDigito(digito);
+        super.setSaldo(saldo);
+        super.setGerenciadorArquivo(gerenciadorArquivo);
+        this.setLimite(limite);
+    }
+
+    public ContaCorrente(ContaCorrente novaConta) {
+        this(novaConta.getAgencia(), novaConta.getNumero(), novaConta.getDigito(), novaConta.getSaldo(),
+                novaConta.getLimite());
+    }
+    /*
+     * Término da declaração de construtores
+     */
+
+    /*
+     * Sobrescrição do metodo saque da superclasse Conta Esse metodo precisou ser
+     * sobrescrito pois na ContaCorrente é necessário verificar o limite de saque da
+     * conta
+     */
+    @Override
+    public void saque(double valor) {
+        if (valor <= limite) { // Testa se o valor de saque solicitado é menor ou igual ao valor de limite da
+                               // conta, caso seja é chamado o método saque da superclasse que testará se
+                               // existe saldo suficiente para realizar o saque.
+            super.saque(valor); // aqui é chamado o metódo saque da superclasse conta que realizará o teste de
+                                // saldo, caso o valor seja menor ou igual ao saldo ele realizará o saque.
+        } else { // caso o valor seja maior que o limite a mensagem abaixo é apresentada
+            double saqueLimite = super.getSaldo() + limite;
+            if (valor <= saqueLimite) {
+                super.setSaldo(0);
+                super.escreverNoExtrato("Saque utilizando o limite especial realizado com sucesso! \n");
+                super.escreverNoExtrato("Valor da transferência: " + valor + "\n");
+                super.escreverNoExtrato("Seu saldo atual: " + this.getSaldo() + "\n");
+            } else {
+                super.escreverNoExtrato("Valor ultrapassa o limite para saque! \n");
+                super.escreverNoExtrato("Valor solicitado de: " + valor + "\n");
+                super.escreverNoExtrato("Seu limite para saque utilizando limite especial é: " + saqueLimite + "\n");
+            }
+        }
+    }
+
+    /*
+     * Sobrescrição do metodo transferencia da superclasse Conta Esse metodo
+     * precisou ser sobrescrito pois na ContaCorrente é necessário verificar o
+     * limite de transferencia da conta
+     */
+    @Override
+    public void transferencia(double valor, Conta conta) {
+        if (valor <= limite) { // Testa se o valor de transferencia solicitado é menor ou igual ao valor de
+                               // limite da conta, caso seja é chamado o método transferencia da superclasse
+                               // que testará se existe saldo suficiente para realizar a transferencia.
+            super.transferencia(valor, conta); // aqui é chamado o metódo transferencia da superclasse conta que
+                                               // realizará o teste de saldo, caso o valor seja menor ou igual ao saldo
+                                               // ele realizará a transferencia.
+        } else { // caso o valor seja maior que o limite a mensagem abaixo é apresentada
+            double transferenciaLimite = super.getSaldo() + limite;
+            if (valor <= transferenciaLimite) {
+                super.setSaldo(0);
+                super.escreverNoExtrato("Transferência utilizando o limite especial realizada com sucesso! \n");
+                super.escreverNoExtrato("Valor da transferência: " + valor + "\n");
+                super.escreverNoExtrato("Seu saldo atual: " + this.getSaldo() + "\n");
+            } else {
+                super.escreverNoExtrato("Valor ultrapassa o limite para transferência! \n");
+                super.escreverNoExtrato("Valor solicitado de: " + valor + "\n");
+                super.escreverNoExtrato(
+                        "Seu limite para transferencia utilizando limite especial é: " + transferenciaLimite + "\n");
+            }
+        }
+    }
+
+    public double getLimite() { // get do Limite
+        return limite;
+    }
+
+    public void setLimite(double limite) { // set do Limite
+        this.limite = limite;
+    }
+
+}
