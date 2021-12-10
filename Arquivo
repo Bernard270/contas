@@ -1,0 +1,62 @@
+package utils;
+
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Scanner;
+
+public class Arquivo {
+    private String caminho;
+
+    public Arquivo(String caminho) {
+        this.setCaminho(caminho);
+    }
+
+    public void criarArquivo() {
+        try {
+            File gerenciadorArquivo = new File(this.caminho);
+            if (gerenciadorArquivo.createNewFile()) {
+                System.out.println("Arquivo criado: " + gerenciadorArquivo.getName());
+            } else {
+                System.out.println("Arquivo já existe.");
+            }
+        } catch (IOException e) {
+            System.out.println("Um erro ocorreu na criação do arquivo. Tente novamente.");
+            e.printStackTrace();
+        }
+    }
+
+    public void escreverNoArquivo(String mensagem) {
+        try {
+            FileWriter escritorArquivo = new FileWriter(this.caminho, true);
+            BufferedWriter bufferEscritor = new BufferedWriter(escritorArquivo);
+            bufferEscritor.write(mensagem);
+            bufferEscritor.close();
+            System.out.println("Mensagem escrita com sucesso.");
+        } catch (IOException e) {
+            System.out.println("Ocorreu um erro na escrita do arquivo. Tente novamente.");
+            e.printStackTrace();
+        }
+    }
+
+    public void lerArquivo() {
+        try {
+            File gerenciadorArquivo = new File(this.caminho);
+            Scanner leitorArquivo = new Scanner(gerenciadorArquivo);
+            while (leitorArquivo.hasNextLine()) {
+                String data = leitorArquivo.nextLine();
+                System.out.println(data);
+            }
+            leitorArquivo.close();
+        } catch (FileNotFoundException e) {
+            System.out.println("Ocorreu um erro na leitura do arquivo. Tente novamente.");
+            e.printStackTrace();
+        }
+    }
+
+    public void setCaminho(String caminho) {
+        this.caminho = caminho;
+    }
+}
