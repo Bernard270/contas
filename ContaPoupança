@@ -1,0 +1,39 @@
+package contas;
+
+import utils.Arquivo;
+
+public class ContaPoupanca extends Conta {
+
+    /*
+     * Inicio da declaração dos contrutores da classe ContaPoupanca seguindo as
+     * convenções estabelecidas pela sociedade de desenvolvedores (JAVABEANS)
+     */
+    public ContaPoupanca() {
+        this(0, 0, 0, 0);
+    };
+
+    public ContaPoupanca(int agencia, int numero, int digito, double saldo) {
+        Arquivo gerenciadorArquivo = new Arquivo(numero + "-extrato.txt");
+        gerenciadorArquivo.criarArquivo();
+        super.setAgencia(agencia);
+        super.setNumero(numero);
+        super.setDigito(digito);
+        super.setSaldo(saldo);
+        super.setGerenciadorArquivo(gerenciadorArquivo);
+    }
+
+    public ContaPoupanca(ContaCorrente novaConta) {
+        this(novaConta.getAgencia(), novaConta.getNumero(), novaConta.getDigito(), novaConta.getSaldo());
+    }
+    /*
+     * Término da declaração de construtores
+     */
+
+    /*
+     * Declaração do metodo rendimento, que recebe um valor percentual faz o calculo
+     * e chama o setSaldo da superclasse para adicionar o novo valor de saldo
+     */
+    public void rendimento(double perc) {
+        super.setSaldo((perc * saldo) + saldo);
+    }
+}
