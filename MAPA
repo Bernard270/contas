@@ -1,0 +1,44 @@
+package mapa;
+
+import contas.ContaCorrente;
+import contas.ContaPoupanca;
+
+public class MAPA {
+
+    public static void main(String[] args) {
+        ContaCorrente contaCorrente1 = new ContaCorrente(1111, 1234, 5, 5000, 3000); // criação da primeira conta
+                                                                                     // corrente
+        ContaCorrente contaCorrente2 = new ContaCorrente(2222, 4321, 0, 10000, 5000); // criação da segunda conta
+                                                                                      // corrente
+        ContaPoupanca contaPoupanca1 = new ContaPoupanca(3333, 5678, 9, 4000); // criação da primeira conta poupanca
+        ContaPoupanca contaPoupanca2 = new ContaPoupanca(4444, 9876, 5, 8000); // criação da segunda conta poupanca
+
+        contaCorrente2.saque(2000); // saque na segunda conta corrente
+        contaCorrente2.saldo(); // solicita o saldo da segunda conta corrente
+
+        contaPoupanca2.saque(2000); // saque na segunda conta poupanca
+        contaPoupanca2.saldo(); // solicita o saldo da segunda conta poupanca
+
+        contaCorrente1.transferencia(2500, contaCorrente2); // transferencia da primeira conta corrente para a segunda
+        contaCorrente1.saldo(); // solicita o saldo da primeira conta corrente
+        contaCorrente2.saldo(); // solicita o saldo da segunda conta corrente
+
+        contaPoupanca1.transferencia(1000, contaPoupanca2); // transferencia da primeira conta poupanca para a segunda
+        contaPoupanca1.saldo(); // solicita o saldo da primeira conta poupanca
+        contaPoupanca2.saldo(); // solicita o saldo da segunda conta poupanca
+
+        contaCorrente1.saque(3000); // tenta realizar saque na primeira conta corrente mesmo sem saldo
+        contaCorrente1.transferencia(3000, contaPoupanca1); // tenta realizar transferencia na primeira conta corrente
+                                                            // mesmo sem saldo
+
+        contaPoupanca1.saque(3050); // tenta realizar saque na primeira conta poupanca mesmo sem saldo
+        contaPoupanca1.transferencia(3050, contaPoupanca2); // tenta realizar transferencia na primeira conta poupanca
+                                                            // mesmo sem saldo
+
+        contaCorrente1.lerExtrato();
+        contaCorrente2.lerExtrato();
+        contaPoupanca1.lerExtrato();
+        contaPoupanca2.lerExtrato();
+    }
+
+}
