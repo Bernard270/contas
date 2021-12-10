@@ -1,0 +1,127 @@
+package contas;
+
+import utils.Arquivo;
+
+public abstract class Conta { // classe marcada com o modificardor abstract pois não deverá ser instaciada
+                              // diretamente, deve servir somente como superclasse
+
+    /*
+     * Declaração das variaveis de instancia (Atributos)
+     */
+    protected int agencia;
+    protected int numero;
+    protected int digito;
+    protected double saldo;
+    protected Arquivo gerenciadorArquivo;
+
+    /*
+     * Declaração do metódo saque
+     */
+    public void saque(double valor) {
+        if (valor <= saldo) { // verifica se o valor solicitado de saque é menor ou igual ao valor de saldo,
+                              // caso seja é realizado o saque
+            this.setSaldo(saldo - valor);
+        } else { // caso valor solicitado seja maior a mensagem abaixo é informada
+            this.escreverNoExtrato("Saldo insuficiente para realizar o saque. \n");
+            this.escreverNoExtrato("Seu saldo é:" + this.getSaldo() + "\n");
+            this.escreverNoExtrato("Valor solicitado de:" + valor + "\n");
+        }
+    }
+
+    /*
+     * Declaração do metódo deposito
+     */
+    public void deposito(double valor) {
+        this.setSaldo(saldo + valor); // aqui não é necessário ser feita nenhuma verificação
+    }
+
+    /*
+     * Declaração do metódo transferecia
+     */
+    public void transferencia(double valor, Conta conta) {
+        if (valor <= saldo) { // verifica se o valor solicitado de transferencia é menor ou igual ao valor de
+                              // saldo, caso seja é realizado a transferencia
+            this.setSaldo(saldo - valor); // retira o valor do saldo da conta que solicitou a transferencia
+            conta.setSaldo(conta.getSaldo() + valor); // ATENÇÃO aqui é setado no saldo da CONTA QUE FOI PASSADA POR
+                                                      // PARAMETRO, por isso dentro do setSaldo() foi usado o
+                                                      // conta.getSaldo() para pegar o saldo da conta que receberá a
+                                                      // transferencia
+        } else { // caso valor solicitado seja maior a mensagem abaixo é informada
+            this.escreverNoExtrato("Saldo insuficiente para realizar a trasferência.\n");
+            this.escreverNoExtrato("Seu saldo é:" + this.getSaldo() + "\n");
+            this.escreverNoExtrato("Valor solicitado de:" + valor + "\n");
+        }
+    }
+
+    /*
+     * Declaração do metódo transferecia
+     */
+    public void saldo() {
+        this.escreverNoExtrato(this.toString()); // chama o this.toString() para mostrar as informações da conta ATENÇÃO
+                                                 // O
+        // METODO toString foi sobrescrito abaixo, caso contrario ele mostraria a
+        // posição da Conta na memoria do computador algo como "cont1@1546132"
+    }
+
+    /*
+     * Declaração do metódo escrever no extrato
+     */
+    public void escreverNoExtrato(String mensagem) {
+        System.out.println(mensagem);
+        this.gerenciadorArquivo.escreverNoArquivo(mensagem);
+    }
+
+    /*
+     * Declaração do metódo ler extrato
+     */
+    public void lerExtrato() {
+        this.gerenciadorArquivo.lerArquivo();
+    }
+
+    public int getAgencia() { // get da Agencia
+        return agencia;
+    }
+
+    public void setAgencia(int agencia) { // set da Agencia
+        this.agencia = agencia;
+    }
+
+    public int getNumero() { // get do Numero
+        return numero;
+    }
+
+    public void setNumero(int numero) { // set do Numero
+        this.numero = numero;
+    }
+
+    public int getDigito() { // get do Digito
+        return digito;
+    }
+
+    public void setDigito(int digito) { // set do Digito
+        this.digito = digito;
+    }
+
+    public double getSaldo() { // get do Saldo
+        return saldo;
+    }
+
+    public void setSaldo(double saldo) { // set do Saldo
+        this.saldo = saldo;
+    }
+
+    public Arquivo getGerenciadorArquivo() { // get do Gerenciador de arquivo
+        return gerenciadorArquivo;
+    }
+
+    public void setGerenciadorArquivo(Arquivo gerenciadorArquivo) { // set do Gerenciador de arquivo
+        this.gerenciadorArquivo = gerenciadorArquivo;
+    }
+
+    @Override
+    public String toString() { // Sobrescrição do metodo toString()
+        return "Conta{" + "agencia=" + agencia + ", numero=" + numero + ", digito=" + digito + ", saldo=" + saldo + '}'
+                + "\n";
+    }
+
+}
